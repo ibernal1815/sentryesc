@@ -27,12 +27,12 @@ Use it only on systems you own or are explicitly authorized to test.
 
 Additional checks are planned, including weak service ACLs, scheduled
 task permissions, autorun key ACLs, stored credentials, and token
-privileges. See internal/checks/ for the pattern used to add new ones.
+privileges. See pkg/checks/ for the pattern used to add new ones.
 
 ## Building
 
 Requires Go 1.22 or later. This tool only builds for Windows, since the
-checks call Windows-only registry APIs and internal/checks is entirely
+checks call Windows-only registry APIs and pkg/checks is entirely
 behind a `//go:build windows` tag.
 
 Building from Windows:
@@ -65,20 +65,37 @@ fatal error such as running on a non-Windows host.
 
 cmd/sentryesc/ contains the CLI entry point and flag parsing.
 
-internal/checks/ contains one file per check. Each check implements the
+pkg/checks/ contains one file per check. Each check implements the
 Check interface (Name(), Description(), Run() ([]Finding, error)) and
 registers itself in DefaultRegistry().
 
-internal/report/ handles output formatting for both JSON and
+pkg/report/ handles output formatting for both JSON and
 human-readable text.
 
-internal/winutil/ provides shared Windows API helpers for registry reads
+pkg/winutil/ provides shared Windows API helpers for registry reads
 and service enumeration, keeping individual checks focused on logic
 rather than API boilerplate.
 
-Adding a new check requires writing a file in internal/checks/ that
+Adding a new check requires writing a file in pkg/checks/ that
 implements the Check interface, then adding one line to
 DefaultRegistry(). No other changes are needed.
+
+## Desktop GUI
+
+gui/ contains an optional desktop interface built with Wails. It calls
+pkg/checks directly, the same scan logic the CLI uses, so there is no
+subprocess or JSON parsing between the two. The CLI and GUI are two
+front ends over one shared codebase.
+
+Building and running the GUI requires the Wails CLI and Node.js in
+addition to Go:
+
+```
+go install github.com/wailsapp/wails/v2/cmd/wails@latest
+cd gui
+wails dev      Live development with hot reload
+wails build    Produces a standalone .exe in gui/build/bin
+```
 
 ## Why Go
 
