@@ -4,6 +4,12 @@
 /sentryesc
 /sentryesc.exe
 
+# GUI (Wails) build output and dependencies
+/gui/build/
+/gui/frontend/dist/
+/gui/frontend/node_modules/
+/gui/frontend/wailsjs/
+
 # Go
 *.test
 *.out
