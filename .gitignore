@@ -1,0 +1,18 @@
+# Build artifacts (root-level binaries only - don't match cmd/sentryesc/ source dir)
+/bin/
+/dist/
+/sentryesc
+/sentryesc.exe
+
+# Go
+*.test
+*.out
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
